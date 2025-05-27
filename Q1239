@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int maxLength(vector<string>& arr) {
+        string str = "";
+        return solve(arr, arr.size() - 1, str);
+    }
+
+    int solve(vector<string>& arr, int ind, string str) {
+        if (ind < 0) return 0;
+
+        string s = arr[ind];
+        bool isValid = true;
+
+        vector<int> freq(26, 0);
+        for (char ch : s) {
+            if (++freq[ch - 'a'] > 1) 
+            {
+                isValid = false;
+                break;
+            }
+        }
+
+        if (isValid) {
+            for (char ch : s) {
+                if (str.find(ch) != string::npos) 
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+        }
+
+        int pick = 0;
+        if (isValid) 
+        {
+            pick = s.length() + solve(arr, ind - 1, str + s);
+        }
+
+        int notPick = solve(arr, ind - 1, str);
+        return max(pick, notPick);
+    }
+};
